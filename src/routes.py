@@ -11,10 +11,6 @@ def home():
     else:
         return render_template('home.html')
 
-@routes.route('/tools')
-def tools():
-    return render_template('tools.html')
-
 @routes.route('/public/<path:path>')
 def public(path):
     return send_from_directory('./public', path)
