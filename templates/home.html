@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block homeActive %}active{% endblock %}
+
+{% block head %}
+<style>
+    .logo {
+        padding-top: 5em;
+        width: 600px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-center align-items-center">
+    <img class="logo" src="/public/images/logo.png" alt="logo"/>
+</div>
+{% endblock %}

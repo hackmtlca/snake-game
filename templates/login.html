@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block head %}
+<style>
+    .container-box {
+        height: 90vh;
+    }
+</style>
+<script>
+    function submitForm(endpoint) {
+        let form = document.getElementById('login-register-form');
+
+        form.action = "/api/users/" + endpoint;
+
+        form.submit();
+    }
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="container-box d-flex flex-column justify-content-center align-items-center">
+    {% if error_message is defined %}
+        <div class="alert alert-{{error_message['type']}}" role="alert">{{error_message['message']}}</div>
+        <br />
+    {% endif %}
+    
+    <div class="card text-white bg-secondary mb-3">
+        <div class="card-header">
+            Hack MTL
+        </div>
+        <div class="card-body">
+            <form id="login-register-form" action='' method="POST">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="username" class="form-control" name="username" id="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" id="password">
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-light"
+                            onclick="submitForm('register')">Register</button>
+                        <button class="btn btn-light" onclick="submitForm('login')">Login</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
