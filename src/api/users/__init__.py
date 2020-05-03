@@ -7,12 +7,6 @@ import jwt
 
 users = Blueprint('users', __name__, url_prefix='/api/users')
 
-# Simple password hashing using SHA256 + Salting.
-def salted_sha256(password: str) -> str:
-    m = hashlib.sha256()
-    m.update((password + PASSWORD_SALT).encode('utf-8'))
-    return m.hexdigest()
-
 class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
@@ -30,6 +24,18 @@ class Users(db.Model):
     def check_password(self, password):
         return self.password == salted_sha256(password)
 
+# Simple password hashing using SHA256 + Salting.
+def salted_sha256(password: str) -> str:
+    m = hashlib.sha256()
+    m.update((password + PASSWORD_SALT).encode('utf-8'))
+    return m.hexdigest()
+
+# Generates a JWT Token using a JWT_SECRET and redirects the user home.
+def generate_session(user_id: int, username: str) -> str:
+    response = make_response(redirect('/'))
+    response.set_cookie('session', jwt.encode({'user_id': user_id, 'username': username}, JWT_SECRET, algorithm='HS256'), httponly=True)
+    return response
+
 # Attempts to read the information from the session.
 # If it fails, it simply redirects home.
 @users.route('/me', methods=['GET'])
@@ -38,12 +44,6 @@ def me():
         return jwt.decode(request.cookies.get('session'), JWT_SECRET, algorithm='HS256')
     except:
         return redirect('/')
-    
-# Generates a JWT Token using a JWT_SECRET and redirects the user home.
-def generate_session(user_id: int, username: str) -> str:
-    response = make_response(redirect('/'))
-    response.set_cookie('session', jwt.encode({'user_id': user_id, 'username': username}, JWT_SECRET, algorithm='HS256'), httponly=True)
-    return response
 
 @users.route('/login', methods=['POST'])
 def login():

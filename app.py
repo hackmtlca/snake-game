@@ -1,12 +1,10 @@
 from flask import Flask, g, request
 from flask_sqlalchemy import SQLAlchemy
-import src.api.users
-import src.api.tools
+from src.secrets import JWT_SECRET
 import src.routes
 import os
 import shutil
 import glob
-from src.secrets import JWT_SECRET
 import jwt
 
 # Checks if the tmp folder is already init. If not, create folder and copy content over.
@@ -32,18 +30,27 @@ db = SQLAlchemy(app)
 # Method that injects into the `g` variable the logged in state and the user. This make this information available for each view.
 @app.before_request
 def inject_user_state():
+    from src.api.users import Users
+
     try:
-        g.user = jwt.decode(request.cookies.get('session'), JWT_SECRET)
+        user = Users.query.filter_by(user_id=jwt.decode(request.cookies.get('session'), JWT_SECRET)['user_id']).first()
+
+        if user == None:
+            raise Exception()
+
+        g.user = user
         g.logged_in = True
-    except:
+    except Exception as e:
         g.user = None
         g.logged_in = False
 
 if __name__ == '__main__':
+    from src.api.users import users
+    from src.routes import routes
+
     # Registers the API blueprints.
-    app.register_blueprint(src.api.users.users)
-    app.register_blueprint(src.api.tools.tools)
-    app.register_blueprint(src.routes.routes)
+    app.register_blueprint(users)
+    app.register_blueprint(routes)
 
     # Remove debug mode once in production.
     app.run(debug=True, host='0.0.0.0', port=80)
