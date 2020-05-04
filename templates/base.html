@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>{% block title %}{% endblock %} - Hack MTL</title>
+    <title>{% block title %}{% endblock %} - Snake Game</title>
     <link rel="shortcut icon" href="/public/images/favicon.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -18,7 +18,6 @@
         body {
             margin: 0px;
             background-color: #343a40;
-            color: white;
         }
 
         .navbar {
@@ -30,7 +29,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">Hack MTL</a>
+        <a class="navbar-brand" href="/">Snake Game</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -38,6 +37,12 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
+                <li class="nav-item {% block homeActive %}{% endblock %}">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item {% block leaderboardActive %}{% endblock %}">
+                    <a class="nav-link" href="/leaderboard">Leaderboard</a>
+                </li>
             </ul>
             {% if g.logged_in %}
             <form action="/logout" class="form-inline my-2 my-lg-0">

@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, request, make_response
+from flask import Blueprint, redirect, request, make_response, g
 from app import db
 from src.errors import LOGIN_ERROR
 import hashlib
@@ -11,6 +11,7 @@ class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     password = db.Column(db.String)
+    score = db.Column(db.Integer)
 
     @property
     def init_password(self):
@@ -69,7 +70,7 @@ def register():
         return redirect('/login?error=' + LOGIN_ERROR.USERNAME_EXIST.value)
     else:
         # Adds the user to the database then creates a session token.
-        user = Users(username=username, init_password=password)
+        user = Users(username=username, init_password=password, score=0)
         db.session.add(user)
         db.session.commit()
         return generate_session(user.user_id, user.username)
@@ -80,3 +81,13 @@ def logout():
     response = make_response(redirect('/'))
     response.delete_cookie('session')
     return response
+
+@users.route('/score', methods=['POST'])
+def score():
+    score = int(request.get_json()['score'])
+
+    if g.logged_in and g.user.score < score:
+        g.user.score = score
+        db.session.commit()
+
+    return redirect('/')

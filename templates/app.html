@@ -2,8 +2,18 @@
 {% block title %}Home{% endblock %}
 {% block homeActive %}active{% endblock %}
 
+{% block head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/p5.js"></script>
+
+<style>
+    .p5Canvas {
+        position: fixed;
+        top: 0;
+        height: 100vh;
+    }
+</style>
+{% endblock %}
+
 {% block body %}
-<div class="d-flex justify-content-center align-items-center">
-    <h1>Welcome {{g.user['username']}}</h1>
-</div>
+<script src="./public/js/game.js"></script>
 {% endblock %}

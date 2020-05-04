@@ -33,3 +33,13 @@ def login():
 def logout():
     # Logout using the api (simple redirect).
     return redirect('/api/users/logout')
+
+@routes.route('/leaderboard')
+def leaderboard():
+    from src.api.users import Users
+
+    users = Users.query.order_by(Users.score.desc()).all()
+
+    flag = 'MTL{SN4K3_M3_UP}' if g.logged_in and g.user.user_id == users[0].user_id else ''
+
+    return render_template('leaderboard.html', users=users, flag=flag)

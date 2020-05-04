@@ -2,17 +2,11 @@
 {% block title %}Home{% endblock %}
 {% block homeActive %}active{% endblock %}
 
-{% block head %}
-<style>
-    .logo {
-        padding-top: 5em;
-        width: 600px;
-    }
-</style>
-{% endblock %}
-
 {% block body %}
-<div class="d-flex justify-content-center align-items-center">
-    <img class="logo" src="/public/images/logo.png" alt="logo"/>
+<div class="d-flex justify-content-center align-items-center" style="color: white; height: 90vh; text-align: center;">
+    <div>
+        <h1>Snake Game</h1>
+        <p><a href='/login'>Login to Start</a></p>
+    </div>
 </div>
 {% endblock %}
